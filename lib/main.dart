@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todoapp/screens/homepage.dart';
+import 'package:todoapp/screens/searchpage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,6 +19,10 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.nunitoSansTextTheme(
         Theme.of(context).textTheme,
       )),
+      routes: {
+        '/home': (context) => Homepage(),
+        '/search': (context) => searchpage(),
+      },
       home: Homepage(),
     );
   }

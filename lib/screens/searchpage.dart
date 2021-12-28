@@ -3,31 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:todoapp/database_helper.dart';
 import 'package:todoapp/screens/taskpage.dart';
 import 'package:todoapp/screens/widgets.dart';
-import 'package:intl/intl.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
+class searchpage extends StatefulWidget {
+  const searchpage({Key? key}) : super(key: key);
 
   @override
-  _HomepageState createState() => _HomepageState();
+  _searchpageState createState() => _searchpageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _searchpageState extends State<searchpage> {
   DatabaseHelper _dbHelper = DatabaseHelper();
+  String keyword = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text("To Do App"),
-            backgroundColor: Colors.black,
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    Navigator.of(context).pushReplacementNamed('/search');
-                  })
-            ]),
+          title: Text("Search"),
+          backgroundColor: Colors.black,
+          automaticallyImplyLeading: true,
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/home');
+              }),
+        ),
         body: SafeArea(
           child: Container(
             width: double.infinity,
@@ -39,16 +39,26 @@ class _HomepageState extends State<Homepage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                        margin: EdgeInsets.only(
-                          top: 10.0,
-                          bottom: 10.0,
-                        ),
-                        child:
-                            Image(image: AssetImage('assets/images/logo.png'))),
+                      margin: EdgeInsets.only(
+                        top: 18.0,
+                        bottom: 18.0,
+                      ),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            border: OutlineInputBorder(),
+                            labelText: 'keyword'),
+                        onChanged: (value) {
+                          keyword = value;
+                          setState(() {});
+                        },
+                      ),
+                    ),
                     Expanded(
                       child: FutureBuilder(
-                        initialData: [],
-                        future: _dbHelper.getTasks(),
+                        // initialData: [],
+                        future: _dbHelper.searchTasks(keyword),
                         builder: (context, AsyncSnapshot snapshot) {
                           return ScrollConfiguration(
                             behavior: NoGlowBehaviour(),
@@ -79,38 +89,6 @@ class _HomepageState extends State<Homepage> {
                       ),
                     )
                   ],
-                ),
-                Positioned(
-                  bottom: 24.0,
-                  right: 0.0,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Taskpage(
-                                  task: null,
-                                )),
-                      ).then((value) {
-                        setState(() {});
-                      });
-                    },
-                    child: Container(
-                      width: 60.0,
-                      height: 60.0,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Color(0xFFDE0761), Color(0xFF6F0431)],
-                            begin: Alignment(0.0, -1.0),
-                            end: Alignment(0.0, 1.0)),
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
-                      child: Image(
-                          image: AssetImage(
-                        "assets/images/add_icon.png",
-                      )),
-                    ),
-                  ),
                 ),
               ],
             ),
